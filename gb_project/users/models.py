@@ -7,6 +7,6 @@ class Users(models.Model):
     email = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lasввtname} {self.email}"
+        return f"{self.firstname} {self.lastname} {self.email}"
 
 
