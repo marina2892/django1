@@ -1,0 +1,35 @@
+
+
+.wrapper{
+    min-height:100vh;
+    margin:0;
+    display: grid;
+    grid-template-rows:1fr 8fr 1fr
+
+}
+.header {
+  background-color:green;
+
+}
+
+.App {
+
+  background-color:#90EE90;
+}
+
+.footer {
+  background-color:#2E8B57;
+}
+
+
+.listusers{
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 3px solid purple;
+}
+
+.listusers td {
+    border: 3px solid purple;
+}
+
+
