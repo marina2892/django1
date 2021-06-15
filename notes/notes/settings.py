@@ -31,6 +31,9 @@ CORS_ALLOWED_ORIGINS = [
    "http://localhost:3000",
 ]
 AUTH_USER_MODEL = 'users.User'
+GRAPHENE = {
+    "SCHEMA": "exercise.schema.schema"
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -68,6 +71,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'exercise.apps.ExerciseConfig',
     'drf_yasg',
+    'graphene_django'
     # 'rest_framework.authtoken'
 
 ]
