@@ -8,8 +8,8 @@ class UserLimitOffsetPagination(LimitOffsetPagination):
    default_limit = 3
 
 
-
-class UserModelViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin,mixins.UpdateModelMixin):
+#нет create - viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin,mixins.UpdateModelMixin
+class UserModelViewSet(viewsets.ModelViewSet):
    queryset = User.objects.all()
    serializer_class = UserSerializer
    pagination_class = UserLimitOffsetPagination

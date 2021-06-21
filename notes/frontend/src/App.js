@@ -8,6 +8,8 @@ import TodoList from './components/Todo.js'
 import MenuItem from './components/Menu.js'
 import FooterItem from './components/Footer.js'
 import LoginForm from './components/Auth.js'
+import ProjectForm from './components/ProjectForm.js'
+import TodoForm from './components/TodoForm.js'
 import Cookies from 'universal-cookie'
 import {BrowserRouter, Route, Switch, Redirect, Link} from 'react-router-dom'
 import axios from 'axios'
@@ -115,20 +117,74 @@ componentDidMount() {
 
   }
 
+deleteProject(id) {
+    const headers = this.get_headers()
+    axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {headers})
+        .then(response => {
+          this.setState({projects: this.state.projects.filter((item)=>item.id !== id)})
+        }).catch(error => console.log(error))
+
+  }
+
+deleteTodo(id) {
+    const headers = this.get_headers()
+    axios.delete(`http://127.0.0.1:8000/api/todo/${id}`, {headers})
+        .then(response => {
+          this.setState({todo: this.state.todo.filter((item)=>item.id !== id)})
+        }).catch(error => console.log(error))
+
+  }
+
+createProject(name, repo, authors) {
+    const headers = this.get_headers()
+    const data = {name: name, repo: repo, authors: authors}
+    console.log(data)
+    axios.post(`http://127.0.0.1:8000/api/projects/`, data, {headers})
+        .then(response => {
+          console.log(response.data)
+          let new_project = response.data
+
+          const authors = this.state.users.filter((item) => item.id === new_project.authors)[0]
+          new_project.authors = authors
+          this.setState({projects: [...this.state.projects, new_project]})
+        }).catch(error => console.log(error))
+  }
+
+createTodo(text, dateCreate, dateUpdate, active, project, user) {
+    const headers = this.get_headers()
+    const data = {text: text, date_create: dateCreate, date_update: dateUpdate,active: active, project: project, user: user }
+    console.log(data)
+    axios.post(`http://127.0.0.1:8000/api/todo/`, data, {headers})
+        .then(response => {
+          console.log(response.data)
+          let new_todo = response.data
+          const user = this.state.users.filter((item) => item.id === new_todo.user)[0]
+          new_todo.user = user
+          const project = this.state.projects.filter((item) => item.id === new_todo.project)[0]
+          new_todo.project = project
+          this.setState({todo: [...this.state.todo, new_todo]})
+        }).catch(error => console.log(error))
+  }
+
+
+
 render() {
     return (
       <div class = "wrapper">
           <BrowserRouter>
           <div class = "header">
               <MenuItem />
+
               {this.is_authenticated() ? <button onClick={()=>this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
           </div>
 
               <div className="App">
                   <Switch>
                       <Route exact path='/' component={() => <UserList items={this.state.users} />}  />
-                      <Route exact path='/projects' component={() => <ProjectList items={this.state.projects} />} />
-                      <Route exact path='/todo' component={() => <TodoList items={this.state.todo} />} />
+                      <Route exact path='/projects' component={() => <ProjectList items={this.state.projects} deleteProject={(id)=>this.deleteProject(id)}/>} />
+                      <Route exact path='/projects/create' component={() => <ProjectForm users = {this.state.users} createProject={(name, repo, authors)=>this.createProject(name, repo, authors)}/>}/>
+                      <Route exact path='/todo/create' component={() => <TodoForm  users = {this.state.users} projects = {this.state.projects} createTodo={(text, dateCreate, dateUpdate, active, project, user)=>this.createTodo(text, dateCreate, dateUpdate, active, project, user)}/>}/>
+                      <Route exact path='/todo' component={() => <TodoList items={this.state.todo} deleteTodo={(id)=>this.deleteTodo(id)}/>} />
                       <Route exact path='/login' component={() => <LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
                       <Route path="/project/:id">
                             <ProjectInfoList items={this.state.projects} />

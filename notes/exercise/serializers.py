@@ -4,7 +4,7 @@ from users.serializers import UserSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-   authors = serializers.StringRelatedField(many=True)
+   #authors = serializers.StringRelatedField(many=True)
 
    class Meta:
        model = Project
@@ -17,7 +17,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
    class Meta:
        model = Todo
-       fields = ['text', 'date_create', 'date_update', 'active', 'project', 'user']
+       fields = ['id', 'text', 'date_create', 'date_update', 'active', 'project', 'user']
 
 
 
